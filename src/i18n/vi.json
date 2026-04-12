@@ -1,15 +1,18 @@
 {
-  "translation": {
-    "common": {
-      "save": "Lưu",
-      "edit": "Sửa",
-      "add": "Thêm mới",
-      "status": "Trạng thái"
-    },
-    "log": {
-      "activityName": "Tên hoạt động",
-      "notes": "Ghi chú",
-      "syncStatus": "Đồng bộ"
-    }
+  "log": {
+    "activityName": "Tên hoạt động",
+    "empty": "Chưa có hoạt động nào được ghi lại",
+    "notes": "Ghi chú",
+    "status": "Trạng thái"
+  },
+  "status": {
+    "pending": "Đang chờ",
+    "completed": "Hoàn thành"
+  },
+  "common": {
+    "save": "Lưu dữ liệu"
+  },
+  "error": {
+    "required": "Vui lòng nhập tên hoạt động"
   }
 }
