@@ -1,0 +1,15 @@
+{
+  "translation": {
+    "common": {
+      "save": "Lưu",
+      "edit": "Sửa",
+      "add": "Thêm mới",
+      "status": "Trạng thái"
+    },
+    "log": {
+      "activityName": "Tên hoạt động",
+      "notes": "Ghi chú",
+      "syncStatus": "Đồng bộ"
+    }
+  }
+}

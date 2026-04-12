@@ -1,0 +1,15 @@
+{
+  "translation": {
+    "common": {
+      "save": "Save",
+      "edit": "Edit",
+      "add": "Add New",
+      "status": "Status"
+    },
+    "log": {
+      "activityName": "Activity Name",
+      "notes": "Notes",
+      "syncStatus": "Sync Status"
+    }
+  }
+}
