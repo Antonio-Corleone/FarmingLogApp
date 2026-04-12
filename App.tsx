@@ -1,11 +1,21 @@
+import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import "./src/i18n";
+import { AppNavigator } from "./src/navigation/appNavigator";
+import { persistor, store } from "./src/store";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Farming Log App - Initial Setup</Text>
-    </View>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   );
 }
 
