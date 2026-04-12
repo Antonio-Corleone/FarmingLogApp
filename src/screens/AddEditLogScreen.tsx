@@ -4,6 +4,7 @@ import { FarmingLog } from "@/src/types/log";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,18 +15,19 @@ import {
 import "react-native-get-random-values";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-
 const AddEditLogScreen = ({ navigation }: any) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  // State cho Form [cite: 6]
   const [activityName, setActivityName] = useState("");
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState<"Pending" | "Completed">("Pending");
 
   const handleSave = () => {
-    if (!activityName.trim()) return alert(t("error.required"));
+    if (!activityName.trim()) {
+      Alert.alert(t("error.required"));
+      return;
+    }
 
     const newLog: FarmingLog = {
       id: uuidv4(),

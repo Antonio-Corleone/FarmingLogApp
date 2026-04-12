@@ -23,7 +23,6 @@ const LogListScreen = ({ navigation }: any) => {
         <Text style={styles.date}>{item.date}</Text>
       </View>
       <View style={styles.statusContainer}>
-        {/* Hiển thị badge trạng thái Sync */}
         <View
           style={[
             styles.syncBadge,
@@ -81,8 +80,8 @@ const styles = StyleSheet.create({
     marginTop: 12,
     backgroundColor: Colors.white,
     borderRadius: 8,
-    elevation: 2, // Shadow cho Android
-    shadowColor: "#000", // Shadow cho iOS
+    elevation: 2,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
   },
