@@ -1,5 +1,5 @@
+import { FarmingLog } from "@/src/types/log";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FarmingLog } from "../../types/log";
 
 interface LogState {
   logs: FarmingLog[];
@@ -15,11 +15,21 @@ const logSlice = createSlice({
   name: "logs",
   initialState,
   reducers: {
-    // Action when user press save [cite: 13, 17]
-    addLogRequest: (state, action: PayloadAction<FarmingLog>) => {
-      state.logs.push(action.payload);
+    // Thêm action này vào slice
+    retrySyncPendingLogs: (state) => {
+      // Action này chỉ dùng để trigger Saga, không thay đổi state ở đây
     },
-    // Action update status after synced [cite: 18]
+    // Action when user press save
+    addLogRequest: (state, action: PayloadAction<FarmingLog>) => {
+      const index = state.logs.findIndex((l) => l.id === action.payload.id);
+      if (index === -1) {
+        state.logs.push(action.payload);
+      } else {
+        // Nếu đã tồn tại (trường hợp retry), chỉ cập nhật dữ liệu nếu cần
+        state.logs[index] = action.payload;
+      }
+    },
+    // Action update status after synced
     updateSyncStatus: (
       state,
       action: PayloadAction<{ id: string; status: "synced" | "failed" }>,

@@ -8,7 +8,7 @@ import logReducer from "./slices/logSlides";
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: ["logs"], // Chỉ lưu lại mảng logs
+  whitelist: ["logs"],
 };
 
 const rootReducer = combineReducers({
