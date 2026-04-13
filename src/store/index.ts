@@ -22,7 +22,7 @@ export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false, // Tắt check để dùng với redux-persist
+      serializableCheck: false,
     }).concat(sagaMiddleware),
 });
 

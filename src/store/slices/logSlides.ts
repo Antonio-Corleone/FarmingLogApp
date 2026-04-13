@@ -15,9 +15,8 @@ const logSlice = createSlice({
   name: "logs",
   initialState,
   reducers: {
-    // Thêm action này vào slice
     retrySyncPendingLogs: (state) => {
-      // Action này chỉ dùng để trigger Saga, không thay đổi state ở đây
+      // Action use to trigger Saga
     },
     // Action when user press save
     addLogRequest: (state, action: PayloadAction<FarmingLog>) => {
@@ -25,7 +24,6 @@ const logSlice = createSlice({
       if (index === -1) {
         state.logs.push(action.payload);
       } else {
-        // Nếu đã tồn tại (trường hợp retry), chỉ cập nhật dữ liệu nếu cần
         state.logs[index] = action.payload;
       }
     },

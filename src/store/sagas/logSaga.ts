@@ -10,21 +10,17 @@ import {
   select,
   take,
   takeEvery,
-} from "redux-saga/effects"; // Đã thêm fork
+} from "redux-saga/effects";
 import { RootState } from "../index";
 
-/**
- * Worker Saga: Xử lý sync một bản ghi đơn lẻ
- * Dùng chung cho cả add mới và auto-sync
- */
-function* syncWorker(log: FarmingLog): Generator<any, void, any> {
+export function* syncWorker(log: FarmingLog): Generator<any, void, any> {
   try {
     const state = yield call(NetInfo.fetch);
 
     if (state.isConnected) {
       console.log(`[Syncing] ID: ${log.id} - Activity: ${log.activityName}`);
 
-      // Giả lập delay API
+      // Simulator call API
       yield delay(2000);
 
       yield put(updateSyncStatus({ id: log.id, status: "synced" }));
@@ -33,33 +29,31 @@ function* syncWorker(log: FarmingLog): Generator<any, void, any> {
       console.log(`[Offline] ID: ${log.id} kept in local.`);
     }
   } catch (error) {
-    console.error(`[Error] Sync failed for ${log.id}:`, error);
-    yield put(updateSyncStatus({ id: log.id, status: "failed" }));
+    if (log && log.id) {
+      console.error(`[Error] Sync failed for ${log.id}:`, error);
+      yield put(updateSyncStatus({ id: log.id, status: "failed" }));
+    }
   }
 }
 
-/**
- * Watcher cho hành động Add Log mới từ UI
- */
-function* watchAddLogSaga(action: ReturnType<typeof addLogRequest>) {
+export function* watchAddLogSaga(action: ReturnType<typeof addLogRequest>) {
   yield call(syncWorker, action.payload);
 }
 
-/**
- * Channel lắng nghe sự thay đổi trạng thái mạng
- */
-function createNetworkChannel() {
+export function createNetworkChannel() {
   return eventChannel((emitter) => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       emitter(state.isConnected);
     });
-    return unsubscribe;
+
+    return () => {
+      if (typeof unsubscribe === "function") {
+        unsubscribe();
+      }
+    };
   });
 }
 
-/**
- * Watcher theo dõi kết nối mạng để auto-sync các bản ghi pending
- */
 export function* watchNetworkConnectivitySaga(): Generator<any, void, any> {
   const chan = yield call(createNetworkChannel);
   try {
@@ -72,12 +66,14 @@ export function* watchNetworkConnectivitySaga(): Generator<any, void, any> {
         const allLogs: FarmingLog[] = yield select(
           (state: RootState) => state.logs.logs,
         );
-        const pendingLogs = allLogs.filter(
-          (log) => log.syncStatus === "pending" || log.syncStatus === "failed",
-        );
+        const pendingLogs = Array.isArray(allLogs)
+          ? allLogs.filter(
+              (log) =>
+                log.syncStatus === "pending" || log.syncStatus === "failed",
+            )
+          : [];
 
         for (const log of pendingLogs) {
-          // Dùng fork để sync song song tất cả các log đang đợi
           yield fork(syncWorker, log);
         }
       }
